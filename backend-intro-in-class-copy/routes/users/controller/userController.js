@@ -106,7 +106,7 @@ module.exports = {
             // else {
                 
                 let savedUser = await createdUser.save();
-                
+            
             res.render("sign-up", {
                 success: true,
             });
@@ -223,9 +223,8 @@ module.exports = {
                         email: logon.email,
                     };
 
-                    console.log('226-userController:', req.session);
-
-                    res.render("home", { user: logon.email }); // this will render the home.ejs page and get the email from the logon variable 
+                    res.redirect("/users/home");
+                    // res.render("home", { user: logon.email }); // this will render the home.ejs page and get the email from the logon variable 
                     
                     // res.json({
                     //     message: "success",

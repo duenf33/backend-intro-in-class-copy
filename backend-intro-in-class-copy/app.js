@@ -4,7 +4,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const session = require("express-session");
-
+const MongoStore = require("connect-mongo")(session);
 const mongoose = require("mongoose");
 
 require("dotenv").config(); // this is required to run de dot env.
@@ -41,6 +41,11 @@ app.use(    // this is able to time the session once logged in. It also saves th
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    store: new MongoStore({
+      url: process.env.MONGODB_URI,
+      mongooseConnection: mongoose.connection,
+      autoReconnect: true,
+    }),
     cookie: { maxAge: 60 * 60 * 1000 },
   })
 );
@@ -48,6 +53,7 @@ app.use(    // this is able to time the session once logged in. It also saves th
 app.use((req, res, next) => { // this makes the error = null across the site locally.
   res.locals.error = null;
   res.locals.success = null;
+  res.locals.data = null;
   next();
 });
 
