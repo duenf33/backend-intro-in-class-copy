@@ -5,12 +5,17 @@ var axios = require("axios");
 // const User = require("./model/User");
 const {
   getAllUsers,
+  sendToSignup,
+  sendToLogin,
+  getHome,
+  postHome,
   signup,
   login,
   deleteUserByEmail,
   deleteUserByID,
   updateUserByID,
   updateUserByEmail,
+  logout,
 } = require("./controller/userController");
 
 const { checkSignupInputIsEmpty } = require("./lib/checkSignup");
@@ -19,58 +24,17 @@ const {
   checkLoginEmptyMiddleware, 
   checkEmailFormat, } 
   = require("./lib/checkLogin");
+
 /* GET users listing. */
-router.get("/create-user", async function (req, res) {
-  res.render("sign-up");
-  // res.render("sign-up", { error: null, success: null });
-});
-
-router.get("/login", function (req, res) {
-  res.render("login", { error: null })
-})
-
-router.get("/home", async function (req, res) {
-
-  // try {
-
-  //   let result = await axios.get(`https://api.giphy.com/v1/gifs/search?api_key=${process.env.GIPHY_API_KEY}&q=hamster`);
-
-  //   res.json(result.data);
-  // } catch (e) {
-  //   res.status(500).json({
-  //     message: "failure",
-  //     data: e.message,
-  //   })
-  // }
-
-
-  if (req.session.user) {
-    res.render("home", { user: req.session.user.email });
-  } else {
-    res.render("message", { error: true })
-  }
-});
-
-router.post("/home", async function (req, res) {
-  if (req.session) {
-    try {
-      let result = await axios.get(`https://api.giphy.com/v1/gifs/search?api_key=${process.env.GIPHY_API_KEY}&q=${req.body.search}`);
-
-      res.render("home", { data: result.data, user: req.session.user.email });
-    } catch (e) {
-      res.status(500).json({
-        message: "failure",
-        data: e.message,
-      })
-    }
-  } else {
-    res.render("message", { error: true });
-  }
-});
-
-
 router.get("/get-all-users", getAllUsers);
 
+router.get("/create-user", sendToSignup);
+
+router.get("/login", sendToLogin)
+
+router.get("/home", getHome);
+
+router.post("/home", postHome);
 //v4 async and await
 router.post("/create-user", checkSignupInputIsEmpty, checkSignupDataType, signup);
 
@@ -86,16 +50,7 @@ router.put("/update-user-by-id/:id", updateUserByID);
 //update user by email
 router.put("/update-user-by-email/", updateUserByEmail);
 
-router.get("/logout", function (req, res) {
-  console.log(req.session);
-
-  req.session.destroy();
-
-  console.log(req.session);
-
-  return res.redirect("/users/login");
-
-});
+router.get("/logout", logout);
 
 module.exports = router;
 

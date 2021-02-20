@@ -9,7 +9,7 @@ const mongoose = require("mongoose");
 
 require("dotenv").config(); // this is required to run de dot env.
 
-mongoose
+mongoose // helps us connect to our database
   .connect(process.env.MONGODB_URI,  // this process.env is located in the dot file env. Its a very sensitive information about the data base.
   { useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -24,29 +24,29 @@ mongoose
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users/users');
 
-const app = express();
+const app = express(); // starting up a server
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.use(logger('dev'));
+app.use(logger('dev'));  // loggin what type of request we are making
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'))); // if there are any static files.. like pictures images...
 
 app.use(    // this is able to time the session once logged in. It also saves the session secret code in the dot file env.
   session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    store: new MongoStore({
+    store: new MongoStore({  // if we dont have this the cookie wont get save in the data base. 
       url: process.env.MONGODB_URI,
       mongooseConnection: mongoose.connection,
       autoReconnect: true,
     }),
-    cookie: { maxAge: 60 * 60 * 1000 },
+    cookie: { maxAge: 60 * 60 * 1000 }, // in milliseconds
   })
 );
 
