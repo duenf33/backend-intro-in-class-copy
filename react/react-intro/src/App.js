@@ -1,35 +1,35 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import React, { Component } from 'react'
+// import PropTypes from "prop-types";
 export default class App extends Component {
   render() {
     return (
       <div>
-        <ParentMovie />
+        <BookLibrary />
       </div>
     );
   }
 }
-class ParentMovie extends Component {
+class BookLibrary extends Component {
   state = {
-    movieListArray: [],
-    movieValue: "",
+    bookListArray: [],
+    bookValue: "",
   };
-  handleOnChange = (event) => {
+  handleOnChange = (e) => {
     this.setState({
-      movieValue: event.target.value,
-    });
+      bookValue: e.target.value,
+    })
   };
-  handleOnClick = (event) => {
-    let movieListArray = [
-      ...this.state.movieListArray,
+  handleOnClick = (e) => {
+    let bookListArray = [
+      ...this.state.bookListArray,
       {
-        id: this.state.movieListArray.length + 1,
-        movie: this.state.movieValue, //this what we captured from the input
+        // id: this.state.bookValue.length + 1,
+        book: this.state.bookValue,
       },
     ];
     this.setState({
-      movieListArray: movieListArray,
-      movieValue: "",
+      bookListArray: bookListArray,
+      bookValue: "",
     });
   };
   render() {
@@ -37,33 +37,44 @@ class ParentMovie extends Component {
       <div style={style.divStyle}>
         <input
           type="text"
-          name="movieValue"
-          value={this.state.movieValue}
+          name="bookValue"
+          value={this.state.bookValue}
           onChange={this.handleOnChange}
         />
-        <br />
-        <button onClick={this.handleOnClick}>Submit</button>
-        <ChildMovie
-          name={"Child 1"}
-          movieListArray={this.state.movieListArray}
+        <br/>
+        <button onClick={this.handleOnClick}>
+          submit
+        </button>
+        <BookChild
+          name={"child 1"}
+          bookListArray={this.state.bookListArray}
         />
       </div>
-    );
+    )
   }
 }
-function ChildMovie(props) {
+function BookChild(props) {
+  console.log(props)
   return (
     <div>
-      {" "}
-      {props.movieListArray.map((item, index) => {
-        return <div key={index}>{item.movie}</div>;
+      {props.bookListArray.map((i, x) => {
+        let t = i.book.trim()
+        if (t === "") {
+          // console.log(i)
+          return <div key={x}>{alert("Enter something")}</div>
+          // return <div key={x}>{console.log("Enter something")}</div>
+        } else {
+          // console.log(i)
+          return (
+            <div key={x}>
+              {t}
+            </div>
+          )
+        }
       })}
     </div>
   );
 }
-ChildMovie.propTypes = {
-  movieListArray: PropTypes.array,
-};
 const style = {
   divStyle: {
     textAlign: "center",
@@ -71,13 +82,22 @@ const style = {
   },
   buttonStyle: {
     width: 250,
-    backgroundColor: "red",
+    backgroundColor: "orange",
   },
 };
+
+
+// React- Review Props, Child Component Intro
+// To show understanding of creating different components and passing down props and prevent click when input is empty
+
 // 1. create a state
-// 2. create an array called movieListArray
-// 3. create a state called movieValue
+// 2. create an array called bookListArray
+// 3. create a state called bookValue
 // 4. create an input to capture user value
 // 5. create a submit button to submit user value
-// 6. create a child component and pass the movieListArray to the child componenet
+// 6. create a child component and pass the movieListArray to the child component
 // 7. render the movieArrayList in the child component
+
+// **EXTRA CREDIT: Do not allow user to submit an empty input**
+
+// * Submit code in Essay 
