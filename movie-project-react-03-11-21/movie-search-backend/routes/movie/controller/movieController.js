@@ -30,35 +30,35 @@ module.exports = {
 		}
 	},
 	deleteByID: async (req, res) => {
-    try {
-      let deletedMovie = await Movie.findByIdAndDelete({
-        _id: req.params.id,
-      });
+		try {
+			let deletedMovie = await Movie.findByIdAndDelete({
+				_id: req.params.id,
+			});
 
-      res.json({
-        data: deletedMovie,
-      });
-    } catch (e) {
-      res.status(500).json({ error: e.message });
-    }
+			res.json({
+				data: deletedMovie,
+			});
+		} catch (e) {
+			res.status(500).json({ error: e.message });
+		}
 	},
 	updateByID: async (req, res) => {
-    try {
-      let updatedMovie = await Movie.findByIdAndUpdate(
-        {
-          _id: req.params.id,
-        },
-        {
-          movie: req.body.movie,
-        },
-        { new: true }
-      );
+		try {
+			let updatedMovie = await Movie.findByIdAndUpdate(
+				{
+					_id: req.params.id,
+				},
+				{
+					movie: req.body.movie,
+				},
+				{ new: true }
+			);
 
-      res.json({
-        data: updatedMovie,
-      });
-    } catch (e) {
-      res.status(500).json({ error: e.message });
-    }
-  },
+			res.json({
+				data: updatedMovie,
+			});
+		} catch (e) {
+			res.status(500).json({ error: e.message });
+		}
+	},
 };
